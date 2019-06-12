@@ -5,7 +5,14 @@
 {% endblock %}
 
 {% block content %}
+	<a href="{% url 'posts_list_url' pk='rating_down' %}"><button>Топ рейтинга</button></a>
+	<a href="{% url 'posts_list_url' pk='date_down' %}"><button>Более свежие</button></a>
+	<a href="{% url 'posts_list_url' pk='date_up' %}"><button>Более старые</button></a>
+	<a href="{% url 'posts_list_url' pk='rating_up' %}"><button>Низ рейтинга</button></a>
 	{% for post in page_object.object_list %}
+		{% if post.moderation is False %}
+
 		{% include 'blog/includes/post_card_template.html' %}
+		{% endif %}
 	{% endfor %}
 {% endblock %}

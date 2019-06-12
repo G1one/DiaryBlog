@@ -9,6 +9,8 @@
    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
    	<link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}">
    	<link rel="stylesheet" href="{% static 'css/blog.css' %}">
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 	<title>
 		{% block title %}
 			BlogEngine
@@ -17,7 +19,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="{% url 'posts_list_url' %}">Diary<b>Blog</b></a>
+		<a class="navbar-brand" href="{% url 'posts_list_url' pk='date_up' %}">Diary<b>Blog</b></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -25,7 +27,7 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="{% url 'posts_list_url' %}">Посты</a>
+					<a class="nav-link" href="{% url 'posts_list_url' pk='date_up' %}">Посты</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'tags_list_url' %}">Теги</a>
@@ -39,6 +41,7 @@
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="{% url 'post_create_url' %}">Новый пост</a>
 						<a class="dropdown-item" href="{% url 'tag_create_url' %}">Новый тег</a>
+
 						<a href="{{ admin_object.get_update_url }}" class="dropdown-item edit" style="{% if detail %}display: block;{% endif %}">Изменить</a>
 						<a href="{{ admin_object.get_delete_url }}" class="dropdown-item delete" style="{% if detail %}display: block;{% endif %}">Удалить</a>
 					</div>
@@ -51,33 +54,23 @@
 				</li>
 				{% endif %}
 
-				{% if request.user.is_authenticated and request.user.is_staff %}
+				{% if request.user.is_authenticated%}
 					<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Вы зашли как <b>@{{ request.user.username }}</b>
 								</a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="{% url 'profile' author_post=request.user.username  %}" >Личный кабинет</a>
+									<a class="dropdown-item" href="{% url 'favorites' author_post=request.user.username %}">Избранное</a>
+									<a class="dropdown-item" href="{{ '/accounts/logout/' }}" style="color: red">Выйти</a>
+				{% endif %}
+									{% if request.user.is_authenticated and request.user.is_staff %}
 									<a class="dropdown-item" href="{% url 'admin:index' %}">Панель администатора</a>
-									<a class="dropdown-item" href="{{ '/accounts/logout/' }}" style="color: red">Выйти</a>
+									{% endif %}
 								</div>
 					</li>
-				{% endif %}
-
-				{% if request.user.is_authenticated and not request.user.is_staff %}
-					<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Вы зашли как <b>@{{ request.user.username }}</b>
-								</a>
-								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="{{ '/accounts/logout/' }}" style="color: red">Выйти</a>
-								</div>
-					</li>
-				{% endif %}
-
-
-
 			</ul>
-			<form class="form-inline my-2 my-lg-0" action='{% url 'posts_list_url' %}'>
+			<form class="form-inline my-2 my-lg-0" action="{% url 'posts_list_url' pk='date_up' %}">
 				<input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Поиск" name="search">
 				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Поиск</button>
 			</form>
@@ -86,7 +79,7 @@
 
 	<div class="content container mt-5">
 		<div class="row">
-			<div class="col-md-10 col-xs-12">
+			<div class="col-md-12 col-xs-12">
 				{% block content %}
 				{% endblock %}
 
@@ -130,4 +123,6 @@
 	</div>
 	<br>
 </body>
+{% block scripts %}
+{% endblock scripts %}
 </html>

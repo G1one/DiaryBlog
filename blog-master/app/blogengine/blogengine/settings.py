@@ -43,6 +43,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
+                'django.template.context_processors.media',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages']}}]
@@ -55,7 +56,7 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.adapter.DefaultAccountAdapter')
 
 ACCOUNT_EMAIL_REQUIRED = True
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/dete_pub'
 LOGIN_URL = '/accounts/login/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_USE_TLS = True
@@ -72,12 +73,12 @@ postgres = True
 if postgres:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'blog',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'blog1',
             'USER': 'postgres',
             'PASSWORD': '200797',
             'HOST': '127.0.0.1',
-            'PORT': '8000'
+            'PORT': '8000',
         }
     }
 else:
@@ -114,3 +115,6 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')]
+
+MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
+MEDIA_URL='/media/'
